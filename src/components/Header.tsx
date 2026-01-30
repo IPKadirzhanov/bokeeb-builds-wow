@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Home, Grid3X3, Building2, Phone, MessageCircle } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, Home, Grid3X3, Building2, Phone, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navLinks = [
-  { name: 'Главная', href: '#hero', icon: Home },
-  { name: 'Каталог домов', href: '#catalog', icon: Grid3X3 },
-  { name: 'Как мы строим', href: '#process', icon: Building2 },
-  { name: 'Контакты', href: '#contacts', icon: Phone },
+  { name: 'Главная', href: '/', icon: Home },
+  { name: 'Каталог', href: '/catalog', icon: Grid3X3 },
+  { name: 'Как мы строим', href: '/how-we-build', icon: Building2 },
+  { name: 'О компании', href: '/about', icon: Users },
+  { name: 'Контакты', href: '/contacts', icon: Phone },
 ];
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,14 +24,6 @@ export const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMobileMenuOpen(false);
-  };
 
   return (
     <motion.header
@@ -44,16 +39,7 @@ export const Header = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <nav className="flex items-center justify-between h-20 lg:h-24">
           {/* Logo */}
-          <motion.a
-            href="#hero"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('#hero');
-            }}
-            className="flex items-center gap-3 group"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
+          <Link to="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-primary rounded flex items-center justify-center">
               <span className="text-primary-foreground font-display text-lg lg:text-xl font-bold">
                 BB
@@ -67,42 +53,28 @@ export const Header = () => {
                 Строительство домов
               </span>
             </div>
-          </motion.a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
-              <motion.a
+              <Link
                 key={link.name}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.href);
-                }}
-                className="flex items-center gap-2 text-foreground/80 hover:text-foreground transition-colors duration-300 underline-hover font-body text-sm"
-                whileHover={{ y: -2 }}
+                to={link.href}
+                className={`flex items-center gap-2 transition-colors duration-300 underline-hover font-body text-sm ${
+                  location.pathname === link.href ? 'text-primary' : 'text-foreground/80 hover:text-foreground'
+                }`}
               >
                 <link.icon className="w-4 h-4" />
                 {link.name}
-              </motion.a>
+              </Link>
             ))}
           </div>
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-4">
-            <Button
-              variant="outline"
-              onClick={() => scrollToSection('#ai-consultant')}
-              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-            >
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Консультация
-            </Button>
-            <Button
-              onClick={() => scrollToSection('#contacts')}
-              className="bg-primary text-primary-foreground hover:bg-forest-light transition-all duration-300 shadow-lg shadow-primary/20"
-            >
-              Рассчитать стоимость
+            <Button asChild className="bg-primary text-primary-foreground hover:bg-forest-light transition-all duration-300 shadow-lg shadow-primary/20">
+              <Link to="/contacts">Рассчитать стоимость</Link>
             </Button>
           </div>
 
@@ -129,33 +101,34 @@ export const Header = () => {
           >
             <div className="container mx-auto px-4 py-6 space-y-4">
               {navLinks.map((link, index) => (
-                <motion.a
+                <motion.div
                   key={link.name}
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(link.href);
-                  }}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="flex items-center gap-3 py-3 text-foreground/80 hover:text-foreground transition-colors"
                 >
-                  <link.icon className="w-5 h-5" />
-                  {link.name}
-                </motion.a>
+                  <Link
+                    to={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 py-3 transition-colors ${
+                      location.pathname === link.href ? 'text-primary' : 'text-foreground/80 hover:text-foreground'
+                    }`}
+                  >
+                    <link.icon className="w-5 h-5" />
+                    {link.name}
+                  </Link>
+                </motion.div>
               ))}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="pt-4 space-y-3"
+                className="pt-4"
               >
-                <Button
-                  onClick={() => scrollToSection('#contacts')}
-                  className="w-full bg-primary text-primary-foreground"
-                >
-                  Рассчитать стоимость
+                <Button asChild className="w-full bg-primary text-primary-foreground">
+                  <Link to="/contacts" onClick={() => setIsMobileMenuOpen(false)}>
+                    Рассчитать стоимость
+                  </Link>
                 </Button>
               </motion.div>
             </div>
