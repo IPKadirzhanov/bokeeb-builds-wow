@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { ArrowUp, Phone, Mail, MapPin } from 'lucide-react';
 
 const navLinks = [
-  { name: 'Главная', href: '#hero' },
-  { name: 'Каталог домов', href: '#catalog' },
-  { name: 'Как мы строим', href: '#process' },
-  { name: 'Контакты', href: '#contacts' },
+  { name: 'Главная', href: '/' },
+  { name: 'Каталог домов', href: '/catalog' },
+  { name: 'Как мы строим', href: '/how-we-build' },
+  { name: 'О компании', href: '/about' },
+  { name: 'Контакты', href: '/contacts' },
 ];
 
 const services = [
@@ -19,13 +21,6 @@ const services = [
 export const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
   };
 
   return (
@@ -69,16 +64,12 @@ export const Footer = () => {
             <ul className="space-y-3">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection(link.href);
-                    }}
+                  <Link
+                    to={link.href}
                     className="text-primary-foreground/70 hover:text-primary-foreground transition-colors font-body text-sm"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
