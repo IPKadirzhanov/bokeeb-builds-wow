@@ -123,9 +123,12 @@ export const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-primary-foreground/50 font-body text-sm">
+          <Link
+            to="/admin/login"
+            className="text-primary-foreground/50 hover:text-primary-foreground/70 font-body text-sm transition-colors cursor-default"
+          >
             © 2024 BB BOKEEB. Все права защищены.
-          </p>
+          </Link>
           <motion.button
             onClick={scrollToTop}
             whileHover={{ y: -3 }}
