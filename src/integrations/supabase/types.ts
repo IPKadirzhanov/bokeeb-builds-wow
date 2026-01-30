@@ -14,16 +14,204 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_logs: {
+        Row: {
+          answer: string
+          created_at: string | null
+          id: string
+          ip_address: string | null
+          language: string | null
+          question: string
+          session_id: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          language?: string | null
+          question: string
+          session_id: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          language?: string | null
+          question?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
+      houses: {
+        Row: {
+          area: number
+          bathrooms: number
+          bedrooms: number
+          construction_days: number | null
+          created_at: string | null
+          description: string | null
+          features: string[] | null
+          floor_plans: string[] | null
+          floors: number
+          id: string
+          images: string[] | null
+          is_published: boolean | null
+          name: string
+          price_from: number
+          slug: string
+          style: Database["public"]["Enums"]["house_style"]
+          updated_at: string | null
+        }
+        Insert: {
+          area: number
+          bathrooms?: number
+          bedrooms?: number
+          construction_days?: number | null
+          created_at?: string | null
+          description?: string | null
+          features?: string[] | null
+          floor_plans?: string[] | null
+          floors?: number
+          id?: string
+          images?: string[] | null
+          is_published?: boolean | null
+          name: string
+          price_from: number
+          slug: string
+          style?: Database["public"]["Enums"]["house_style"]
+          updated_at?: string | null
+        }
+        Update: {
+          area?: number
+          bathrooms?: number
+          bedrooms?: number
+          construction_days?: number | null
+          created_at?: string | null
+          description?: string | null
+          features?: string[] | null
+          floor_plans?: string[] | null
+          floors?: number
+          id?: string
+          images?: string[] | null
+          is_published?: boolean | null
+          name?: string
+          price_from?: number
+          slug?: string
+          style?: Database["public"]["Enums"]["house_style"]
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          house_id: string | null
+          id: string
+          name: string
+          phone: string
+          source: string | null
+          status: Database["public"]["Enums"]["lead_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          house_id?: string | null
+          id?: string
+          name: string
+          phone: string
+          source?: string | null
+          status?: Database["public"]["Enums"]["lead_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          house_id?: string | null
+          id?: string
+          name?: string
+          phone?: string
+          source?: string | null
+          status?: Database["public"]["Enums"]["lead_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_house_id_fkey"
+            columns: ["house_id"]
+            isOneToOne: false
+            referencedRelation: "houses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      settings: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string | null
+          value: Json
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string | null
+          value: Json
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string | null
+          value?: Json
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      house_style:
+        | "modern"
+        | "classic"
+        | "scandinavian"
+        | "minimalist"
+        | "chalet"
+      lead_status: "new" | "in_progress" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +338,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      house_style: [
+        "modern",
+        "classic",
+        "scandinavian",
+        "minimalist",
+        "chalet",
+      ],
+      lead_status: ["new", "in_progress", "closed"],
+    },
   },
 } as const
