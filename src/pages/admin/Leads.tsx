@@ -116,12 +116,12 @@ export default function AdminLeadsPage() {
                 className="pl-10"
               />
             </div>
-            <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as LeadStatus | '')}>
+            <Select value={statusFilter || "all"} onValueChange={(v) => setStatusFilter(v === "all" ? "" : v as LeadStatus)}>
               <SelectTrigger className="w-full md:w-48">
                 <SelectValue placeholder="Все статусы" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Все статусы</SelectItem>
+                <SelectItem value="all">Все статусы</SelectItem>
                 {Object.entries(statusLabels).map(([value, label]) => (
                   <SelectItem key={value} value={value}>
                     {label}
